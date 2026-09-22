@@ -13,9 +13,12 @@ function env(name: string): string | undefined {
   return undefined;
 }
 
-/** URL canónica donde vive esta landing (sin barra final). Se usa para
- *  canonical, hreflang, Open Graph, sitemap.xml y robots.txt. */
-export const SITE_URL = env('SITE_URL') ?? 'https://loremasterai.site';
+/** URL pública de ESTA landing (no del proyecto).
+ *  Se usa para canonical, hreflang, Open Graph, sitemap.xml y robots.txt.
+ *  OJO: no es loremasterai.site — ese dominio aloja la demo del proyecto.
+ *  Vercel asigna un subdominio gratis al crear el proyecto: verifica el real
+ *  en tu dashboard y ponlo aquí vía variable de entorno SITE_URL. */
+export const SITE_URL = env('SITE_URL') ?? 'https://loremaster-landing.vercel.app';
 
 /** Gmail que recibe las solicitudes de invitación a la demo.
  *  Se usa como respaldo (enlace mailto) si el envío directo falla. */
@@ -28,4 +31,6 @@ export const INVITE_EMAIL = env('INVITE_EMAIL') ?? 'loremaster.demo@gmail.com';
 export const WEB3FORMS_KEY = env('PUBLIC_WEB3FORMS_KEY') ?? env('WEB3FORMS_KEY') ?? '';
 
 export const GITHUB_URL = 'https://github.com/sergiogonzalezch/loremaster';
+/** URL de la demo del proyecto LoreMaster (la app real, con acceso por
+ *  invitación). Los botones "Demo" de la landing apuntan aquí. */
 export const DEMO_URL = 'https://loremasterai.site';

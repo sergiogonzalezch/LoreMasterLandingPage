@@ -1,5 +1,6 @@
 ---
 import type { Lang, Dict } from '../i18n/translations';
+import { DEMO_URL, GITHUB_URL } from '../site';
 interface Props { lang: Lang; t: Dict; }
 const { t } = Astro.props;
 const f = t.footer;
@@ -10,8 +11,8 @@ const year = new Date().getFullYear();
     <a class="brand" href="#top"><span class="glyph">◈</span><span>Lore<em>Master</em></span></a>
     <p>{f.tagline}</p>
     <div class="foot-links">
-      <a href="https://github.com/sergiogonzalezch/loremaster" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://loremasterai.site" target="_blank" rel="noopener">Demo</a>
+      <a href={GITHUB_URL} target="_blank" rel="noopener">GitHub</a>
+      <a href={DEMO_URL} target="_blank" rel="noopener">Demo</a>
       <a href="#top">{f.top}</a>
     </div>
     <p class="rights">© {year} {f.rights}</p>

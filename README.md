@@ -4,9 +4,16 @@ Landing page bilingüe (ES/EN) de **LoreMaster**: plataforma RAG para worldbuild
 (escritores y narradores de rol). Sitio 100 % estático construido con
 [Astro](https://astro.build), sin backend propio.
 
-- **URL producción:** https://loremasterai.site
-- **Demo del producto:** https://loremasterai.site (acceso por invitación)
+- **URL producción (landing):** https://loremaster-landing.vercel.app
+  (subdominio gratis de Vercel — verifica el real en tu dashboard)
+- **Demo del proyecto (app real):** https://loremasterai.site (acceso por invitación)
 - **Repo del producto:** https://github.com/sergiogonzalezch/loremaster
+
+> Esta landing y la demo son **dos sitios distintos**: la landing vive en
+> Vercel y los botones "Demo" apuntan a `loremasterai.site`, donde se aloja
+> el proyecto. En el código esto se refleja en `src/site.ts`:
+> `SITE_URL` = URL de la landing (canonical, Open Graph, sitemap),
+> `DEMO_URL` = URL de la demo del proyecto.
 
 ## 1. Contenido de la página
 
@@ -42,7 +49,7 @@ public/           # favicon.svg, og.svg
 |---|---|---|
 | `PUBLIC_WEB3FORMS_KEY` | Sí (formulario) | Access key de Web3Forms para envío directo |
 | `INVITE_EMAIL` | No | Correo de respaldo para el enlace mailto |
-| `SITE_URL` | No | URL canónica (por defecto `https://loremasterai.site`) |
+| `SITE_URL` | No | URL pública de la landing (por defecto `https://loremaster-landing.vercel.app`; pon la real). OJO: no es la URL de la demo |
 
 ## 2. Desarrollo local
 
@@ -106,11 +113,15 @@ Git, HTTPS y dominio personalizado incluidos en el plan Hobby.
 3. En **Settings → Environment Variables** añade:
    - `PUBLIC_WEB3FORMS_KEY` = tu access key
    - `INVITE_EMAIL` = tu correo (opcional)
-   - `SITE_URL` = tu URL final, p. ej. `https://loremasterai.site` (opcional)
+   - `SITE_URL` = la URL real de tu landing en Vercel
+     (verifícala en el dashboard tras el primer deploy, p. ej.
+     `https://loremaster-landing.vercel.app`)
 4. **Deploy**. Cada `git push` a la rama principal redespliega solo.
-5. Dominio propio: **Settings → Domains** → añade `loremasterai.site` y
-   apunta el DNS según indique Vercel (registro A `76.76.21.21` o CNAME
-   `cname.vercel-dns.com`). Vercel emite el certificado HTTPS solo.
+5. (Opcional, más adelante) Dominio propio: **Settings → Domains**. Ten en
+   cuenta que `loremasterai.site` ya aloja la demo del proyecto: si algún día
+   quieres la landing en un dominio propio, usa un **subdominio**
+   (p. ej. `landing.loremasterai.site`) para no pisar la demo, y actualiza
+   `SITE_URL` con esa URL.
 
 ### Alternativas gratuitas
 
@@ -120,9 +131,9 @@ Git, HTTPS y dominio personalizado incluidos en el plan Hobby.
 | **Netlify** | 300 min build/mes | Preset Astro, output `dist`. Dominio y HTTPS incluidos |
 | **GitHub Pages** | Ilimitado (repos públicos) | Requiere `base` en `astro.config.mjs` si es URL tipo `usuario.github.io/repo` y workflow de deploy |
 
-> Con dominio propio (`loremasterai.site`) el costo total se mantiene en
-> ~$0 de hosting: Vercel/Cloudflare/Netlify no cobran por sitios estáticos
-> en sus planes gratuitos.
+> El hosting es ~$0 en planes gratuitos: Vercel/Cloudflare/Netlify no cobran
+> por sitios estáticos. Y recuerda: `loremasterai.site` sigue alojando la
+> demo del proyecto; la landing vive en su propio subdominio de Vercel.
 
 ## 5. Licencia
 
