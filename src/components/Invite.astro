@@ -30,7 +30,7 @@ const mailtoHref = `mailto:${INVITE_EMAIL}?subject=${encodeURIComponent(v.subjec
       <label>{v.message}
         <textarea class="lm-input" name="message" rows={4} placeholder={v.messagePh} required></textarea>
       </label>
-      <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <input type="text" name="botcheck" hidden tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none !important" />
       <p class="err" id="inviteErr" hidden>{v.required}</p>
       <button class="btn btn-primary btn-lg" type="submit" id="inviteSubmit">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
@@ -140,7 +140,6 @@ const mailtoHref = `mailto:${INVITE_EMAIL}?subject=${encodeURIComponent(v.subjec
   .lm-input::placeholder { color: var(--lm-text-dim); }
   select.lm-input option { background: #141424; }
   textarea.lm-input { resize: vertical; min-height: 110px; }
-  .hp { display: none !important; }
   .err { color: #e0655f; font-size: 0.83rem; margin: 0; }
   .alt { color: var(--lm-text-muted); font-size: 0.83rem; margin: 0; }
   .linklike { background: none; border: none; padding: 0; color: var(--lm-accent); cursor: pointer; font: inherit; text-decoration: underline; }
