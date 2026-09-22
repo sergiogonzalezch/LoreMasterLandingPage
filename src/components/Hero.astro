@@ -1,0 +1,72 @@
+---
+import type { Dict } from '../i18n/translations';
+interface Props { t: Dict; }
+const { t } = Astro.props;
+const h = t.hero;
+---
+<section class="hero wrap" id="top">
+  <div class="hero-badge reveal"><span class="pulse"></span>{h.badge}</div>
+  <h1 class="reveal">{h.titleA}<br /><span class="hl">{h.titleB}</span></h1>
+  <p class="sub reveal">{h.sub}</p>
+  <div class="cta reveal">
+    <a class="btn btn-primary btn-lg" href="#invite">{h.demoCta} →</a>
+    <a class="btn btn-outline btn-lg" href="https://github.com/sergiogonzalezch/loremaster" target="_blank" rel="noopener">{h.codeCta}</a>
+  </div>
+  <div class="clone reveal">
+    <code id="cloneCmd">{h.clone}</code>
+    <button class="copy" id="copyBtn" data-copied={h.copied} title="Copy">⧉</button>
+  </div>
+  <div class="stats">
+    {h.stats.map((s) => (
+      <div class="stat lm-card reveal"><span class="n">{s.n}{s.s && <small>{s.s}</small>}</span><span class="l">{s.l}</span></div>
+    ))}
+  </div>
+</section>
+<script is:inline>
+  document.getElementById('copyBtn')?.addEventListener('click', async (ev) => {
+    const btn = ev.currentTarget;
+    const txt = document.getElementById('cloneCmd')?.textContent?.trim() || '';
+    try { await navigator.clipboard.writeText(txt); } catch {
+      const r = document.createRange();
+      r.selectNode(document.getElementById('cloneCmd'));
+      const sel = window.getSelection();
+      sel?.removeAllRanges(); sel?.addRange(r);
+      document.execCommand('copy'); sel?.removeAllRanges();
+    }
+    const orig = btn.textContent;
+    btn.textContent = '✓ ' + (btn.getAttribute('data-copied') || 'Copied!');
+    setTimeout(() => { btn.textContent = orig; }, 1600);
+  });
+</script>
+<style>
+  .hero { text-align: center; padding: 72px 24px 10px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 9px;
+    border: 1px solid var(--lm-border-accent); background: var(--lm-accent-glow);
+    color: var(--lm-gold-light); border-radius: 999px; padding: 7px 16px;
+    font-size: 0.8rem; font-weight: 600; margin-bottom: 26px;
+  }
+  .pulse { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,.7);} 70% { box-shadow: 0 0 0 10px rgba(74,222,128,0);} 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0);} }
+  .hero h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); line-height: 1.05; color: var(--lm-text); margin-bottom: 18px; }
+  .hero h1 .hl { color: var(--lm-accent); }
+  .sub { color: var(--lm-text-muted); max-width: 680px; margin: 0 auto 30px; font-size: 1.08rem; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .clone {
+    display: inline-flex; align-items: center; gap: 12px; background: #050510;
+    border: 1px solid var(--lm-border); border-radius: 10px; padding: 10px 8px 10px 18px;
+    font-family: ui-monospace, monospace; font-size: 0.8rem; color: var(--lm-gold-light);
+    margin-bottom: 44px; max-width: 100%;
+  }
+  .clone code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .copy {
+    background: var(--lm-raised); border: 1px solid var(--lm-border); color: var(--lm-text);
+    border-radius: 6px; padding: 6px 12px; cursor: pointer; white-space: nowrap;
+  }
+  .copy:hover { border-color: var(--lm-accent); }
+  .stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+  .stat { padding: 14px 26px; min-width: 150px; }
+  .stat .n { display: block; font-family: var(--lm-font-head); font-size: 1.5rem; color: var(--lm-gold-light); }
+  .stat .n small { font-size: 0.9rem; color: var(--lm-text-muted); }
+  .stat .l { font-size: 0.76rem; color: var(--lm-text-muted); }
+</style>

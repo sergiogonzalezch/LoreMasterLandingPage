@@ -1,0 +1,19 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductTabs from '../../components/ProductTabs.astro';
+import TechTabs from '../../components/TechTabs.astro';
+import ProjectTabs from '../../components/ProjectTabs.astro';
+import Faq from '../../components/Faq.astro';
+import { ui } from '../../i18n/translations';
+
+const lang = 'en' as const;
+const t = ui[lang];
+---
+<Layout lang={lang} t={t}>
+  <Hero t={t} />
+  <ProductTabs t={t} />
+  <TechTabs t={t} />
+  <ProjectTabs t={t} />
+  <Faq t={t} />
+</Layout>

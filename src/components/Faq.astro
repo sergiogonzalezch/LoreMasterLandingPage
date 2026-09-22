@@ -1,0 +1,32 @@
+---
+import type { Dict } from '../i18n/translations';
+interface Props { t: Dict; }
+const { t } = Astro.props;
+const f = t.faq;
+---
+<section class="section wrap" id="faq">
+  <p class="kicker reveal">{f.kicker}</p>
+  <h2 class="reveal">{f.titleA} <span class="hl">{f.titleB}</span></h2>
+  <div class="list">
+    {f.items.map((it) => (
+      <details class="lm-card reveal item">
+        <summary>{it.q}<span class="plus">+</span></summary>
+        <p>{it.a}</p>
+      </details>
+    ))}
+  </div>
+</section>
+<style>
+  .list { display: grid; gap: 12px; max-width: 780px; margin: 26px auto 0; text-align: left; }
+  .item { padding: 0 22px; }
+  .item summary {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    cursor: pointer; padding: 18px 0; font-family: var(--lm-font-head);
+    font-size: 0.98rem; color: var(--lm-text); list-style: none;
+  }
+  .item summary::-webkit-details-marker { display: none; }
+  .item summary:hover { color: var(--lm-accent); }
+  .plus { color: var(--lm-accent); font-size: 1.3rem; line-height: 1; transition: transform 0.2s; }
+  .item[open] .plus { transform: rotate(45deg); }
+  .item p { color: var(--lm-text-muted); font-size: 0.9rem; margin: 0; padding: 0 0 20px; }
+</style>

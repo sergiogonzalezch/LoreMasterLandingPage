@@ -1,0 +1,31 @@
+---
+import type { Lang, Dict } from '../i18n/translations';
+interface Props { lang: Lang; t: Dict; }
+const { t } = Astro.props;
+const f = t.footer;
+const year = new Date().getFullYear();
+---
+<footer class="lm-footer">
+  <div class="wrap foot">
+    <a class="brand" href="#top"><span class="glyph">◈</span><span>Lore<em>Master</em></span></a>
+    <p>{f.tagline}</p>
+    <div class="foot-links">
+      <a href="https://github.com/sergiogonzalezch/loremaster" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://loremasterai.site" target="_blank" rel="noopener">Demo</a>
+      <a href="#top">{f.top}</a>
+    </div>
+    <p class="rights">© {year} {f.rights}</p>
+  </div>
+</footer>
+<style>
+  .lm-footer { border-top: 1px solid var(--lm-border); background: rgba(10,10,18,.75); backdrop-filter: blur(8px); padding: 36px 0; margin-top: 2rem; }
+  .foot { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
+  .brand { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; font-family: var(--lm-font-head); font-size: 1.05rem; font-weight: 700; color: var(--lm-text); }
+  .brand em { font-style: normal; color: var(--lm-accent); }
+  .glyph { color: var(--lm-accent); animation: lm-glyph-pulse 3s ease-in-out infinite; }
+  .foot p { color: var(--lm-text-muted); font-size: 0.83rem; margin: 0; }
+  .foot-links { display: flex; gap: 20px; }
+  .foot-links a { color: var(--lm-gold-light); text-decoration: none; font-size: 0.86rem; }
+  .foot-links a:hover { color: var(--lm-accent); }
+  .rights { font-size: 0.72rem !important; color: var(--lm-text-dim) !important; }
+</style>

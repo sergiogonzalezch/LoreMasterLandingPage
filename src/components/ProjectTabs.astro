@@ -1,0 +1,173 @@
+---
+import type { Dict } from '../i18n/translations';
+interface Props { t: Dict; }
+const { t } = Astro.props;
+const h = t.projectTabs;
+const q = t.quality;
+const s = t.selfhost;
+const r = t.roadmap;
+const c = t.costs;
+---
+<section class="section wrap" id="proyecto">
+  <p class="kicker reveal">{h.kicker}</p>
+  <h2 class="reveal">{h.titleA} <span class="hl">{h.titleB}</span></h2>
+
+  <div class="tabbar reveal" role="tablist" aria-label={h.kicker} data-tabs="proyecto">
+    <button class="tab-btn" role="tab" aria-selected="true" data-pane="quality">📊 {t.nav.quality}</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-pane="selfhost">🚀 {t.nav.selfhost}</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-pane="roadmap">🗺️ {t.nav.roadmap}</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-pane="costs">💰 {t.nav.costs}</button>
+  </div>
+
+  <div class="tab-pane active" role="tabpanel" data-pane="quality">
+    <p class="lede">{q.lede}</p>
+    <div class="metrics">
+      {q.metrics.map((m) => (
+        <div class="metric lm-card">
+          <span class="num"><span class="count" data-count={m.n}>0</span><small>{m.suffix}</small></span>
+          <p>{m.label}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="tab-pane" role="tabpanel" data-pane="selfhost">
+    <div class="panel lm-card">
+      <div class="info">
+        <p class="kicker left">{s.kicker}</p>
+        <h3 class="panel-h">{s.titleA} <span class="hl">{s.titleB}</span></h3>
+        <p class="lede left">{s.lede}</p>
+        <div class="envs">
+          {s.envs.map((e) => (
+            <div class="env">
+              <p class="env-h"><b>{e.name}</b><span>{e.tag}</span></p>
+              <ul>{e.items.map((i) => <li>✓ {i}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+        <pre class="deploy">{s.deploy.join('\n')}</pre>
+      </div>
+      <div class="price">
+        <p class="price-k">{s.priceK}</p>
+        <p class="price-n">{s.price}<span>{s.pricePer}</span></p>
+        <p class="price-s">{s.priceSub}</p>
+        <a class="btn btn-primary btn-lg" href="https://github.com/sergiogonzalezch/loremaster" target="_blank" rel="noopener">{s.priceCta} →</a>
+        <p class="price-note">{s.priceNote}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-pane" role="tabpanel" data-pane="roadmap">
+    <p class="lede">{r.lede}</p>
+    <ol class="timeline">
+      {r.items.map((it) => (
+        <li class={`lm-card node ${it.s}`}>
+          <span class="dot" aria-hidden="true">{it.s === 'done' ? '✓' : it.tag}</span>
+          <div><p class="tag">{it.tag}</p><b>{it.title}</b><p class="desc">{it.desc}</p></div>
+        </li>
+      ))}
+    </ol>
+    <p class="note">{r.note}</p>
+  </div>
+
+  <div class="tab-pane" role="tabpanel" data-pane="costs">
+    <p class="lede">{c.lede}</p>
+    <div class="plans">
+      {c.plans.map((p, i) => (
+        <article class={`lm-card hoverable plan${i === 0 ? ' hero' : ''}`}>
+          <p class="tag">{p.tag}</p>
+          <h3>{p.name}</h3>
+          <p class="price">{p.price}<span>{p.per}</span></p>
+          <ul>{p.items.map((it) => <li>✓ {it}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+    <p class="note">{c.foot}</p>
+  </div>
+</section>
+<script is:inline>
+  (() => {
+    const bar = document.querySelector('[data-tabs="proyecto"]');
+    const panes = document.querySelectorAll('#proyecto .tab-pane');
+    bar?.querySelectorAll('.tab-btn').forEach((b) =>
+      b.addEventListener('click', () => {
+        bar.querySelectorAll('.tab-btn').forEach((x) => x.setAttribute('aria-selected', 'false'));
+        b.setAttribute('aria-selected', 'true');
+        const p = b.getAttribute('data-pane');
+        panes.forEach((el) => el.classList.toggle('active', el.getAttribute('data-pane') === p));
+      })
+    );
+  })();
+  (() => {
+    const els = document.querySelectorAll('#proyecto .count');
+    const cio = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        cio.unobserve(el);
+        const target = Number(el.getAttribute('data-count'));
+        const t0 = performance.now(), dur = 1200;
+        const tick = (now) => {
+          const p = Math.min((now - t0) / dur, 1);
+          el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.4 });
+    els.forEach((el) => cio.observe(el));
+  })();
+</script>
+<style>
+  .tab-pane { padding-top: 30px; text-align: center; }
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
+  .metric { padding: 30px 20px; }
+  .num { font-family: var(--lm-font-head); font-size: 2rem; color: var(--lm-text); }
+  .num small { font-size: 1.1rem; color: var(--lm-text-muted); }
+  .metric p { color: var(--lm-text-muted); font-size: 0.83rem; margin: 6px 0 0; }
+  .panel { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 34px; text-align: left; padding: 46px; margin-top: 10px; }
+  .kicker.left { text-align: left; }
+  .panel-h { font-size: clamp(1.4rem, 2.6vw, 1.9rem); margin-bottom: 12px; }
+  .panel-h .hl, h2 .hl { color: var(--lm-accent); }
+  .lede.left { margin: 0 0 20px; }
+  .envs { display: grid; gap: 12px; margin-bottom: 20px; }
+  .env { border: 1px solid var(--lm-border); border-radius: var(--lm-radius-lg); padding: 14px 18px; background: rgba(0,0,0,.2); }
+  .env-h { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; }
+  .env-h b { color: var(--lm-text); }
+  .env-h span { font-size: 0.68rem; background: var(--lm-accent-glow); border: 1px solid var(--lm-border-accent); color: var(--lm-gold-light); border-radius: 999px; padding: 2px 10px; }
+  .env ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .env li { color: var(--lm-text-muted); font-size: 0.86rem; }
+  .deploy { background: #050510; border: 1px solid var(--lm-border); border-radius: 8px; padding: 16px 18px; font-family: ui-monospace, monospace; font-size: 0.78rem; line-height: 1.9; color: var(--lm-gold-light); white-space: pre-wrap; margin: 0; }
+  .price { background: var(--lm-accent-glow); border: 1px solid var(--lm-border-accent); border-radius: 14px; padding: 36px 30px; text-align: center; align-self: center; }
+  .price-k { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--lm-accent); font-weight: 700; margin: 0; text-transform: uppercase; }
+  .price-n { font-family: var(--lm-font-head); font-size: 3.2rem; color: var(--lm-text); margin: 6px 0; }
+  .price-n span { font-size: 1rem; color: var(--lm-text-muted); }
+  .price-s { color: var(--lm-text-muted); font-size: 0.88rem; margin: 0 0 22px; }
+  .price-note { font-size: 0.72rem; color: var(--lm-text-muted); margin: 14px 0 0; }
+  .timeline { list-style: none; margin: 10px auto 0; padding: 0; max-width: 720px; display: grid; gap: 12px; text-align: left; }
+  .node { display: flex; gap: 16px; align-items: flex-start; padding: 18px 22px; }
+  .dot { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; font-family: var(--lm-font-head); background: var(--lm-raised); border: 1px solid var(--lm-border); color: var(--lm-text-muted); }
+  .node.done .dot { background: rgba(46,125,82,.18); border-color: rgba(46,125,82,.5); color: #4db87a; }
+  .node.current { border-color: var(--lm-border-accent); }
+  .node.current .dot { background: var(--lm-accent-glow); border-color: var(--lm-accent); color: var(--lm-gold-light); font-size: 0.95rem; }
+  .node.next { opacity: 0.75; border-style: dashed; }
+  .timeline .tag { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--lm-accent); margin: 0 0 2px; }
+  .node b { font-size: 0.95rem; color: var(--lm-text); }
+  .desc { color: var(--lm-text-muted); font-size: 0.86rem; margin: 4px 0 0; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align: left; margin-top: 10px; }
+  .plan { padding: 30px 26px; display: flex; flex-direction: column; }
+  .plan.hero { border-color: var(--lm-border-accent); background: linear-gradient(180deg, var(--lm-accent-glow), var(--lm-surface)); }
+  .plan .tag { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lm-accent); font-weight: 700; margin: 0 0 8px; }
+  .plan h3 { font-size: 1.15rem; margin-bottom: 4px; }
+  .plan .price { font-family: var(--lm-font-head); font-size: 2.4rem; color: var(--lm-text); margin: 0 0 16px; background: none; border: none; padding: 0; text-align: left; }
+  .plan .price span { font-size: 0.95rem; color: var(--lm-text-muted); }
+  .plan ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .plan li { color: var(--lm-text-muted); font-size: 0.86rem; }
+  .note { color: var(--lm-text-muted); font-size: 0.83rem; max-width: 780px; margin: 20px auto 0; }
+  @media (max-width: 900px) {
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .panel { grid-template-columns: 1fr; padding: 30px; }
+    .plans { grid-template-columns: 1fr; max-width: 520px; margin-left: auto; margin-right: auto; }
+  }
+  @media (max-width: 600px) { .metrics { grid-template-columns: 1fr; } }
+</style>

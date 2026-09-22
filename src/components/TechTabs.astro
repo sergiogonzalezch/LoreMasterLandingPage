@@ -1,0 +1,142 @@
+---
+import type { Dict } from '../i18n/translations';
+interface Props { t: Dict; }
+const { t } = Astro.props;
+const h = t.techTabs;
+const s = t.stack;
+const d = t.dataArch;
+const g = t.security;
+---
+<section class="section wrap" id="arquitectura">
+  <p class="kicker reveal">{h.kicker}</p>
+  <h2 class="reveal">{h.titleA} <span class="hl">{h.titleB}</span></h2>
+
+  <div class="tabbar reveal" role="tablist" aria-label={h.kicker} data-tabs="arquitectura">
+    <button class="tab-btn" role="tab" aria-selected="true" data-pane="stack">🧱 {t.nav.stack}</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-pane="data">🗄️ {t.nav.data}</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-pane="security">🛡️ {t.nav.security}</button>
+  </div>
+
+  <div class="tab-pane active" role="tabpanel" data-pane="stack">
+    <p class="lede">{s.lede}</p>
+    <div class="table-wrap lm-card">
+      <table>
+        <thead><tr>{s.headers.map((x) => <th>{x}</th>)}</tr></thead>
+        <tbody>
+          {s.rows.map((r) => (
+            <tr><td class="capa">{r.c}</td><td>{r.t}</td><td class="notes">{r.n}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="decisions">
+      {s.decisions.map((x) => (
+        <div class="mini"><b>{x.t}</b><p>{x.d}</p></div>
+      ))}
+    </div>
+  </div>
+
+  <div class="tab-pane" role="tabpanel" data-pane="data">
+    <p class="lede">{d.lede}</p>
+    <div class="pipes">
+      <article class="lm-card pipe">
+        <h3>{d.textTitle}</h3>
+        <p class="flow">{d.textSub}</p>
+        <ol>
+          {d.textSteps.map((x) => (
+            <li><b>{x.t}</b><span>{x.d}</span></li>
+          ))}
+        </ol>
+      </article>
+      <article class="lm-card pipe">
+        <h3>{d.imgTitle}</h3>
+        <p class="flow">{d.imgSub}</p>
+        <ol>
+          {d.imgSteps.map((x) => (
+            <li><b>{x.t}</b><span>{x.d}</span></li>
+          ))}
+        </ol>
+      </article>
+    </div>
+    <h3 class="sub">{d.storageTitle}</h3>
+    <div class="table-wrap lm-card">
+      <table>
+        <thead><tr>{d.storageHeaders.map((x) => <th>{x}</th>)}</tr></thead>
+        <tbody>
+          {d.storageRows.map((r) => (
+            <tr><td class="capa">{r.c}</td><td><code class="inline">{r.t}</code></td><td><code class="inline">{r.n}</code></td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="note">{d.note}</p>
+  </div>
+
+  <div class="tab-pane" role="tabpanel" data-pane="security">
+    <p class="lede">{g.lede}</p>
+    <div class="grid">
+      {g.cards.map((c) => (
+        <article class="lm-card hoverable card">
+          <div class="icon">{c.icon}</div>
+          <h3>{c.title}</h3>
+          <p>{c.desc}</p>
+        </article>
+      ))}
+    </div>
+    <div class="strip">
+      {g.strip.map((m) => (
+        <div class="lm-card stat"><span class="n">{m.n}</span><span class="l">{m.l}</span></div>
+      ))}
+    </div>
+  </div>
+</section>
+<script is:inline>
+  (() => {
+    const bar = document.querySelector('[data-tabs="arquitectura"]');
+    const panes = document.querySelectorAll('#arquitectura .tab-pane');
+    bar?.querySelectorAll('.tab-btn').forEach((b) =>
+      b.addEventListener('click', () => {
+        bar.querySelectorAll('.tab-btn').forEach((x) => x.setAttribute('aria-selected', 'false'));
+        b.setAttribute('aria-selected', 'true');
+        const p = b.getAttribute('data-pane');
+        panes.forEach((el) => el.classList.toggle('active', el.getAttribute('data-pane') === p));
+      })
+    );
+  })();
+</script>
+<style>
+  .tab-pane { padding-top: 30px; text-align: center; }
+  .table-wrap { overflow-x: auto; margin-top: 10px; text-align: left; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 680px; }
+  th { font-family: var(--lm-font-head); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--lm-accent); padding: 15px 18px; border-bottom: 1px solid var(--lm-border); background: var(--lm-accent-glow); text-align: left; }
+  td { padding: 13px 18px; border-bottom: 1px solid var(--lm-border); color: var(--lm-text-muted); }
+  tr:last-child td { border-bottom: none; }
+  .capa { color: var(--lm-text); font-weight: 700; white-space: nowrap; }
+  .decisions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; text-align: left; }
+  .mini { background: var(--lm-accent-glow); border: 1px solid var(--lm-border-accent); border-radius: var(--lm-radius-lg); padding: 22px; }
+  .mini b { color: var(--lm-gold-light); font-size: 0.92rem; }
+  .mini p { color: var(--lm-text-muted); font-size: 0.86rem; margin: 8px 0 0; }
+  .pipes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; text-align: left; margin-top: 10px; }
+  .pipe { padding: 28px; }
+  .pipe h3 { font-size: 1.1rem; margin-bottom: 6px; }
+  .flow { font-family: ui-monospace, monospace; font-size: 0.74rem; color: var(--lm-accent); background: var(--lm-accent-glow); border: 1px solid var(--lm-border-accent); border-radius: 8px; padding: 8px 12px; margin: 0 0 18px; }
+  .pipe ol { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: step; }
+  .pipe li { position: relative; padding: 0 0 16px 34px; display: grid; gap: 2px; }
+  .pipe li::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--lm-raised); border: 1px solid var(--lm-border-accent); color: var(--lm-gold-light); font-size: 0.68rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .pipe li:not(:last-child)::after { content: ""; position: absolute; left: 11px; top: 26px; bottom: 2px; width: 1px; background: var(--lm-border-accent); }
+  .pipe li b { font-size: 0.88rem; color: var(--lm-text); }
+  .pipe li span { font-size: 0.83rem; color: var(--lm-text-muted); }
+  .sub { margin: 34px 0 0; font-size: 1.25rem; }
+  .note { color: var(--lm-text-muted); font-size: 0.83rem; max-width: 760px; margin: 18px auto 0; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align: left; margin-top: 10px; }
+  .card { padding: 26px; }
+  .icon { font-size: 1.7rem; margin-bottom: 12px; }
+  .card h3 { font-size: 1.02rem; margin-bottom: 8px; }
+  .card p { color: var(--lm-text-muted); font-size: 0.88rem; margin: 0; }
+  .strip { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 22px; }
+  .stat { padding: 14px 30px; min-width: 170px; }
+  .stat .n { display: block; font-family: var(--lm-font-head); font-size: 1.6rem; color: var(--lm-gold-light); }
+  .stat .l { font-size: 0.76rem; color: var(--lm-text-muted); }
+  @media (max-width: 900px) { .decisions, .grid { grid-template-columns: 1fr 1fr; } .pipes { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+</style>

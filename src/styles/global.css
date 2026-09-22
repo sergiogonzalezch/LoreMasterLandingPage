@@ -1,0 +1,141 @@
+/* ─── LoreMaster landing · tokens heredados de frontend/src/index.css ─── */
+:root {
+  --lm-bg: #07070e;
+  --lm-surface: rgba(12, 12, 22, 0.85);
+  --lm-raised: rgba(20, 20, 36, 0.9);
+  --lm-border: rgba(255, 255, 255, 0.06);
+  --lm-accent: #9d6fe8;
+  --lm-accent-glow: rgba(157, 111, 232, 0.08);
+  --lm-border-accent: rgba(157, 111, 232, 0.32);
+  --lm-gold-light: #b48ef5;
+  --lm-text: #e2ddd3;
+  --lm-text-muted: #6a6a88;
+  --lm-text-dim: #38385a;
+  --lm-success: #2e7d52;
+  --lm-radius: 5px;
+  --lm-radius-lg: 10px;
+  --lm-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  --lm-font-head: "Lora", Georgia, serif;
+  --lm-font-body: "Space Grotesk", system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--lm-bg);
+  color: var(--lm-text);
+  font-family: var(--lm-font-body);
+  font-size: 16px;
+  line-height: 1.72;
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Star-map grid + violet nebula (como en el proyecto) */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 90% 90% at 50% 40%, black 40%, transparent 100%);
+}
+body::after {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(88, 50, 160, 0.18), transparent 70%);
+}
+main, header.lm-nav, footer.lm-footer { position: relative; z-index: 1; }
+
+h1, h2, h3 { font-family: var(--lm-font-head); letter-spacing: -0.01em; line-height: 1.25; margin: 0; }
+a { color: var(--lm-accent); }
+::selection { background-color: rgba(157, 111, 232, 0.25); color: var(--lm-text); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--lm-bg); }
+::-webkit-scrollbar-thumb { background: var(--lm-border); border-radius: 3px; }
+
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+.kicker {
+  font-family: var(--lm-font-head); font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.06em; color: var(--lm-accent); margin-bottom: 10px;
+}
+.section { padding: 84px 0 12px; text-align: center; }
+.section h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); margin-bottom: 12px; }
+.section h2 .hl { color: var(--lm-accent); }
+.lede { color: var(--lm-text-muted); max-width: 720px; margin: 0 auto 34px; font-size: 1.02rem; }
+
+/* Botones estilo LM */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--lm-font-head); font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.01em; border-radius: var(--lm-radius);
+  padding: 0.6rem 1.2rem; text-decoration: none; cursor: pointer;
+  border: 1px solid transparent; transition: all 0.2s ease;
+}
+.btn-lg { font-size: 0.9rem; padding: 0.8rem 1.6rem; }
+.btn-primary {
+  background-color: var(--lm-accent); border-color: var(--lm-accent); color: #09090f;
+  animation: lm-btn-glow 3s ease-in-out infinite;
+}
+.btn-primary:hover { filter: brightness(1.12); color: #09090f; animation: none; transform: translateY(-2px); }
+.btn-outline {
+  color: var(--lm-accent); border-color: var(--lm-border-accent); background: transparent;
+}
+.btn-outline:hover { background: var(--lm-accent-glow); border-color: var(--lm-accent); color: var(--lm-accent); }
+
+/* Cards estilo LM */
+.lm-card {
+  background: var(--lm-surface); border: 1px solid var(--lm-border);
+  border-radius: var(--lm-radius-lg); backdrop-filter: blur(12px);
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+.lm-card.hoverable:hover {
+  border-color: var(--lm-border-accent);
+  box-shadow: 0 0 0 1px var(--lm-border-accent), var(--lm-shadow), 0 0 30px var(--lm-accent-glow);
+  transform: translateY(-3px);
+}
+
+/* Reveal on scroll */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+code.inline {
+  font-family: ui-monospace, monospace; font-size: 0.78em;
+  background: rgba(157, 111, 232, 0.12); color: var(--lm-gold-light);
+  padding: 0.1em 0.4em; border-radius: 4px;
+}
+
+@keyframes lm-btn-glow {
+  0%, 100% { box-shadow: 0 0 8px var(--lm-accent-glow); }
+  50% { box-shadow: 0 0 22px var(--lm-accent-glow), 0 0 40px var(--lm-accent-glow); }
+}
+@keyframes lm-glyph-pulse {
+  0%, 100% { opacity: 0.7; text-shadow: 0 0 8px var(--lm-accent); }
+  50% { opacity: 1; text-shadow: 0 0 20px var(--lm-accent), 0 0 40px var(--lm-accent-glow); }
+}
+
+@media (max-width: 900px) { .section { padding: 64px 0 8px; } }
+
+/* ─── Tabs compartidos ─── */
+.tabbar {
+  display: inline-flex; gap: 4px; flex-wrap: wrap; justify-content: center;
+  background: rgba(0,0,0,.3); border: 1px solid var(--lm-border);
+  border-radius: 12px; padding: 5px; margin: 26px auto 0;
+}
+.tab-btn {
+  font-family: var(--lm-font-head); font-size: 0.8rem; font-weight: 600;
+  color: var(--lm-text-muted); background: transparent; border: 1px solid transparent;
+  border-radius: 8px; padding: 0.55rem 1.15rem; cursor: pointer;
+  transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 7px;
+}
+.tab-btn:hover { color: var(--lm-text); background: rgba(255,255,255,.04); }
+.tab-btn[aria-selected="true"] {
+  color: var(--lm-gold-light); background: var(--lm-accent-glow);
+  border-color: var(--lm-border-accent);
+}
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: lm-fade 0.35s ease both; }
+@keyframes lm-fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
